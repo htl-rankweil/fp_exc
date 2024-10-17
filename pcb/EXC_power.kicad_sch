@@ -1710,7 +1710,7 @@
     (property "Value" "SW_SPDT" (at 181.61 123.19 90)
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
-    (property "Footprint" "Button_Switch_SMD:SW_SPDT_CK-JS102011SAQN" (at 177.8 121.92 0)
+    (property "Footprint" "Button_Switch_SMD:SW_SPDT_CK_JS102011SAQN" (at 177.8 121.92 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 177.8 121.92 0)
