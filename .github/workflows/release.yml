@@ -142,7 +142,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./artifact/kicad/schematic/BSV-schematic.pdf
+        asset_path: ./artifact/kicad/schematic/EXC-schematic.pdf
         asset_name: schematic.pdf
         asset_content_type: application/pdf
 
@@ -182,7 +182,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./artifact/kicad/drill/BSV-drill_map.pdf
+        asset_path: ./artifact/kicad/drill/EXC-drill_map.pdf
         asset_name: drill.pdf
         asset_content_type: application/pdf
 
