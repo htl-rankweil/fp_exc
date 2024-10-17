@@ -48,7 +48,7 @@ jobs:
       DFP: "ATmega_DFP.2.2.509"
       DEVICE: "atmega164a"
       OutputFolder: "./output"
-      FirmwareName: "DIAC_FW_1_0"
+      FirmwareName: "demo"
     runs-on: ubuntu-latest
     steps:
     - name: Fetch repository
@@ -90,8 +90,8 @@ jobs:
           ./avr8-gnu-toolchain-linux_x86_64/bin/avr-gcc -g -x c -O1 -mmcu=${{ env.DEVICE }} -std=gnu99 -B ./DFP/gcc/dev/${{ env.DEVICE }} -I ./DFP/include -c ./firmware/${{ env.FirmwareName }}/main.c -o ./temp/main.o
           ./avr8-gnu-toolchain-linux_x86_64/bin/avr-gcc -g -mmcu=${{ env.DEVICE }} -B ./DFP/gcc/dev/${{ env.DEVICE }} -I ./DFP/include -o ./temp/main.elf ./temp/main.o ${libraries}
           
-          ./avr8-gnu-toolchain-linux_x86_64/bin/avr-objcopy -j .text -j .data -O ihex ./temp/main.elf ${{ env.OutputFolder }}/${{ env.FirmwareName }}_t1606.hex
-          ./avr8-gnu-toolchain-linux_x86_64/bin/avr-objcopy -j .eeprom --change-section-lma .eeprom=0 -O ihex ./temp/main.elf ${{ env.OutputFolder }}/${{ env.FirmwareName }}_t1606.eep
+          ./avr8-gnu-toolchain-linux_x86_64/bin/avr-objcopy -j .text -j .data -O ihex ./temp/main.elf ${{ env.OutputFolder }}/${{ env.FirmwareName }}_m164a.hex
+          ./avr8-gnu-toolchain-linux_x86_64/bin/avr-objcopy -j .eeprom --change-section-lma .eeprom=0 -O ihex ./temp/main.elf ${{ env.OutputFolder }}/${{ env.FirmwareName }}_m164a.eep
 
           tar -czvf build.tar.gz ${{ env.OutputFolder }}
           zip -r build.zip ${{ env.OutputFolder }}
