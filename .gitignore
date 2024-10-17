@@ -1,0 +1,16 @@
+[Oo][Ll][Dd]/
+[Bb][Aa][Kk]/
+
+ltsim/
+sim/
+
+*.docx
+*.xlsx
+*.pdf
+*.zip
+
+*.bak
+*.bkp
+
+*.[Oo][Ll][Dd]
+*.[Bb][Aa][Kk]

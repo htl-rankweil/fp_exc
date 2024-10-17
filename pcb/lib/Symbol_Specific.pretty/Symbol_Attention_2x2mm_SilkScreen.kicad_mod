@@ -1,0 +1,23 @@
+(footprint "Symbol_Attention_2x2mm_SilkScreen" (version 20221018) (generator pcbnew)
+  (layer "F.Cu")
+  (fp_text reference "REF**" (at 0 -3.81 unlocked) (layer "F.SilkS")
+      (effects (font (size 1 1) (thickness 0.1)))
+    (tstamp 8217d5c1-4342-431d-b70e-1a051d9b838e)
+  )
+  (fp_text value "Symbol_Attention_2x2mm_SilkScreen" (at 0 2.54 unlocked) (layer "F.Fab")
+      (effects (font (size 1 1) (thickness 0.15)))
+    (tstamp 2bff8d93-6914-4f0c-9f99-b07b2af3f21b)
+  )
+  (fp_text user "!" (at -0.508 0 unlocked) (layer "F.SilkS")
+      (effects (font (size 1.9 1.9) (thickness 0.1)) (justify left bottom))
+    (tstamp 697b3d07-d928-444c-9567-c9edd1e251cf)
+  )
+  (fp_poly
+    (pts
+      (xy -1.27 0)
+      (xy 0 -2.794)
+      (xy 1.27 0)
+    )
+
+    (stroke (width 0.2) (type solid)) (fill none) (layer "F.SilkS") (tstamp 433853a9-20b2-4128-961f-e8a263126dcb))
+)

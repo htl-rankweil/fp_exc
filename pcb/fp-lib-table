@@ -1,0 +1,6 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "Displaytech")(type "KiCad")(uri "${KIPRJMOD}/lib/Displaytech.pretty")(options "")(descr ""))
+  (lib (name "Symbol_Specific")(type "KiCad")(uri "${KIPRJMOD}/lib/Symbol_Specific.pretty")(options "")(descr ""))
+  (lib (name "Images")(type "KiCad")(uri "${KIPRJMOD}/lib/Images.pretty")(options "")(descr ""))
+)
