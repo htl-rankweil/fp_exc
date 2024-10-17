@@ -50,7 +50,7 @@ jobs:
       DFP: "ATmega_DFP.2.2.509"
       DEVICE: "atmega164a"
       OutputFolder: "./output"
-      FirmwareName: "DIAC_FW_1_0"
+      FirmwareName: "demo"
     runs-on: ubuntu-latest
     steps:
     - name: Fetch repository
