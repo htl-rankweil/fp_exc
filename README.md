@@ -13,8 +13,8 @@ The `EXC` is a microcontroller board with an [ATmega16A](#additional-information
 
 | Type      | File               | Description              |
 |:---------:|:------------------:|:-------------------------|
-| Schematic | [pdf](https://github.com/0x007E/exc/releases/latest/download/schematic.pdf) / [cadlab](https://cadlab.io/project/?/main/files) | Schematic files |
-| Board | [pdf](https://github.com/0x007E/exc/releases/latest/download/pcb.pdf) / [cadlab](https://cadlab.io/project/?/main/files) | Board file |
+| Schematic | [pdf](https://github.com/0x007E/exc/releases/latest/download/schematic.pdf) / [cadlab](https://cadlab.io/project/28573/main/files) | Schematic files |
+| Board | [pdf](https://github.com/0x007E/exc/releases/latest/download/pcb.pdf) / [cadlab](https://cadlab.io/project/28573/main/files) | Board file |
 | Drill | [pdf](https://github.com/0x007E/exc/releases/latest/download/drill.pdf) | Drill file |
 | Gerber | [zip](https://github.com/0x007E/exc/releases/latest/download/kicad.zip) / [tar](https://github.com/0x007E/exc/releases/latest/download/kicad.tar.gz) | Gerber/Drill files |
 | Firmware | [zip](https://github.com/0x007E/exc/releases/latest/download/firmware.zip) / [tar](https://github.com/0x007E/exc/releases/latest/download/firmware.tar.gz) | Firmware for ATmega164A |
