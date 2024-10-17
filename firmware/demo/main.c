@@ -5,11 +5,11 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-#include "adc/adc.h"
-#include "spi/spi.h"
-#include "twi/twi.h"
-#include "uart/uart.h"
-#include "lcd/lcd.h"
+#include "../lib/adc/adc.h"
+#include "../lib/spi/spi.h"
+#include "../lib/twi/twi.h"
+#include "../lib/uart/uart.h"
+#include "../lib/lcd/lcd.h"
 
 static void system_init()
 {
