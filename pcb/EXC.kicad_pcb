@@ -5082,7 +5082,7 @@
     (pad "16" thru_hole oval (at -32 17.75) (size 1.8 5) (drill 1.2) (layers "*.Cu" "*.Mask")
       (net 31 "Net-(DP1-DB7)") (pinfunction "DB7") (pintype "bidirectional") (tstamp 07e4e85a-e6d4-4f1e-ac30-f9c9f5d7d2c5))
     (model "${KIPRJMOD}/lib/Displaytech.pretty/PinSocket_1x16_P2.54mm_Vertical.step"
-      (offset (xyz 6.1 -17.75 0))
+      (offset (xyz 6 -17.6 0.1))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 90))
     )
