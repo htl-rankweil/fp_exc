@@ -1,0 +1,235 @@
+name: EXC Release Pipeline
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  export-kicad:
+    env:
+      BaseFileName: "EXC"
+      SchematicFileExtension: "kicad_sch"
+      PCBFileExtension: "kicad_pcb"
+      OutputFolder: "kicad"
+      ConfigFilePath: ".kibot/release.kibot.yaml"
+    runs-on: ubuntu-latest
+    steps:
+    - name: Fetch repository
+      uses: actions/checkout@v4
+    
+    - name: Prepare output directory
+      run: |
+        mkdir -p ${{ env.OutputFolder }}
+        cp -r ./pcb ${{ env.OutputFolder }}/kicad
+        cp ./LICENSE ${{ env.OutputFolder }}
+
+    - name: Copy License
+      run: |
+          mkdir -p ${{ env.OutputFolder }}
+          cp ./LICENSE ${{ env.OutputFolder }}
+    
+    - name: Run KiBOT
+      uses: INTI-CMNB/KiBot@v2_dk7
+      with:
+        config: ${{ env.ConfigFilePath }}
+        dir: ${{ env.OutputFolder }}
+        schema: "pcb/${{ env.BaseFileName }}.${{ env.SchematicFileExtension }}"
+        board: "pcb/${{ env.BaseFileName }}.${{ env.PCBFileExtension }}"
+    
+    - name: Archive artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: kicad-export
+        path: ${{ env.OutputFolder }}
+        retention-days: 1
+
+  build-firmware:
+    env:
+      TOOLCHAIN: "3.7.0.1796"
+      DFP: "ATmega_DFP.2.2.509"
+      DEVICE: "atmega164a"
+      OutputFolder: "./output"
+      FirmwareName: "DIAC_FW_1_0"
+    runs-on: ubuntu-latest
+    steps:
+    - name: Fetch repository
+      uses: actions/checkout@v4
+    - name: Copy License
+      run: |
+          mkdir ${{ env.OutputFolder }}
+          cp ./firmware/LICENSE ${{ env.OutputFolder }}
+    - name: Install zip
+      run: sudo apt-get install -y zip
+    - name: install-build-tools
+      run: |
+          wget https://ww1.microchip.com/downloads/aemDocuments/documents/DEV/ProductDocuments/SoftwareTools/avr8-gnu-toolchain-${{ env.TOOLCHAIN }}-linux.any.x86_64.tar.gz
+          tar -xf *.tar.gz
+    - name: install-dfp-package
+      run: |
+          wget http://packs.download.atmel.com/Atmel.${{ env.DFP }}.atpack
+          unzip *.atpack -d ./DFP
+    - name: build-firmware
+      run: |
+          mkdir temp
+
+          libraries=""
+
+          for dir in ./firmware/lib/*/
+          do
+              name=${dir%*/}
+              echo "Building ${name##*/}"
+
+              first_file=$(ls ./firmware/lib/${name##*/}/*.c| head -1)
+              filename=$(basename -- "$first_file")
+              filename="${filename%.*}"
+
+              ./avr8-gnu-toolchain-linux_x86_64/bin/avr-gcc -g -x c -O1 -mmcu=${{ env.DEVICE }} -std=gnu99 -B ./DFP/gcc/dev/${{ env.DEVICE }} -I ./DFP/include -c ./firmware/lib/${name##*/}/${filename}.c -o ./temp/${filename}.o
+
+              libraries+="./temp/${filename}.o "
+          done
+
+          ./avr8-gnu-toolchain-linux_x86_64/bin/avr-gcc -g -x c -O1 -mmcu=${{ env.DEVICE }} -std=gnu99 -B ./DFP/gcc/dev/${{ env.DEVICE }} -I ./DFP/include -c ./firmware/${{ env.FirmwareName }}/main.c -o ./temp/main.o
+          ./avr8-gnu-toolchain-linux_x86_64/bin/avr-gcc -g -mmcu=${{ env.DEVICE }} -B ./DFP/gcc/dev/${{ env.DEVICE }} -I ./DFP/include -o ./temp/main.elf ./temp/main.o ${libraries}
+          
+          ./avr8-gnu-toolchain-linux_x86_64/bin/avr-objcopy -j .text -j .data -O ihex ./temp/main.elf ${{ env.OutputFolder }}/${{ env.FirmwareName }}_m164a.hex
+          ./avr8-gnu-toolchain-linux_x86_64/bin/avr-objcopy -j .eeprom --change-section-lma .eeprom=0 -O ihex ./temp/main.elf ${{ env.OutputFolder }}/${{ env.FirmwareName }}_m164a.eep
+
+          tar -czvf build.tar.gz ${{ env.OutputFolder }}
+          zip -r build.zip ${{ env.OutputFolder }}
+
+    - name: upload-firmware
+      uses: actions/upload-artifact@v4
+      with:
+        name: firmware-build
+        path: ${{ env.OutputFolder }}
+        retention-days: 1
+
+  create-release:
+    needs: [export-kicad, build-firmware]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: |
+            Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+
+    - name: Download KiCad Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: kicad-export
+        path: ./artifact/kicad
+    - name: Display structure
+      run: ls -R ./artifact/kicad
+    - name: Create Compressed File
+      run: |
+        cd ./artifact
+        tar -czvf ./kicad.tar.gz ./kicad
+        zip -r ./kicad.zip ./kicad
+        cd ..
+
+    - name: Upload KiCAD Schematic
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./artifact/kicad/schematic/BSV-schematic.pdf
+        asset_name: schematic.pdf
+        asset_content_type: application/pdf
+
+    - name: Upload KiCAD PCB
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./artifact/kicad/pcb/PCB.pdf
+        asset_name: pcb.pdf
+        asset_content_type: application/pdf
+
+    - name: Upload KiCAD TOP Render
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./artifact/kicad/blender/top.png
+        asset_name: top.kicad.png
+        asset_content_type: image/png
+
+    - name: Upload KiCAD BOTTOM Render
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./artifact/kicad/blender/bottom.png
+        asset_name: bottom.kicad.png
+        asset_content_type: image/png
+
+    - name: Upload KiCAD Drill PDF
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./artifact/kicad/drill/BSV-drill_map.pdf
+        asset_name: drill.pdf
+        asset_content_type: application/pdf
+
+    - name: Upload KiCAD Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./artifact/kicad.tar.gz
+        asset_name: kicad.tar.gz
+        asset_content_type: application/gzip
+
+    - name: Upload KiCAD Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./artifact/kicad.zip
+        asset_name: kicad.zip
+        asset_content_type: application/zip
+
+    - name: Download Build Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: build-firmware
+        path: ./artifact/build
+    - name: Display structure
+      run: ls -R ./artifact/build
+
+    - name: Upload Build Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./artifact/build/build.tar.gz
+        asset_name: firmware.tar.gz
+        asset_content_type: application/gzip
+    
+    - name: Upload Build Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./artifact/build/build.zip
+        asset_name: firmware.zip
+        asset_content_type: application/zip
