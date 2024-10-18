@@ -2,7 +2,7 @@
 
 # `EXC` - EXtendable Controller (Erweiterbarer Mikrocontroller)
 
-The `EXC` is a microcontroller board with an [ATmega16A](#additional-information)/[ATmega164A](#additional-information). The Board can be powerd over USB or from an external Soruce (`9-15V`) with common Voltages of `3V3` or `5V`. Over the USB port it is also possible to establish a serial (`uart`) connection to a computer. The Board itself offers an `SPI`, `I2C` interface for bus systems. The external interrupts of the microcontroller and the analgo input pins are connected to an interface. on connector `DP1` a [Display](#additional-information) can be connected to the board. The available demo firmware offers a quick demonstartion of the board functionallity. Check the [Software](#software) passage for connection information.
+The `EXC` is a microcontroller board with an [ATmega16A](#additional-information)/[ATmega164A](#additional-information). The Board can be powerd over USB or from an external Source (`9-15V`) and used with common Voltages of `3V3` or `5V`. Over the USB port it is also possible to establish a serial (`uart`) connection to a computer. The Board itself offers a `SPI`, `I2C` interface for bus systems, a interface for connection to external interrupts of the microcontroller and a analog interface for reading analog data into the microcontroller. At `DP1` a [Display](#additional-information) can be connected to the board. The available demo firmware offers a quick demonstartion of the board functionallity. Check the [Software](#software) section to get more information.
 
 | Experience | Level |
 |:------------|:-----:|
@@ -21,11 +21,11 @@ The `EXC` is a microcontroller board with an [ATmega16A](#additional-information
 
 # Hardware
 
-There are two parts of the hardware. The pcb and the housing of the `EXC`. The pcb is created with `KiCAD` and the housing with `FreeCAD`. All files are build with `github actions` so that they are ready for a production environment. The housing is printed with a 3D-printer (`Dremel 3D40`).
+There are two parts of the hardware. The pcb and the housing of the `EXC`. The pcb is created with `KiCAD`. All files are built with `github actions` so that they are ready for a production environment.
 
 ## PCB
 
-The circuit board is populated on both sides. The best way for soldering is within a vapor phase soldering system.
+The circuit board is populated on one side. The best way for soldering is within a vapor phase soldering system.
 
 ### Top Layer
 
@@ -37,17 +37,17 @@ The circuit board is populated on both sides. The best way for soldering is with
 
 # Configuration
 
-With Jumper J13 the `EXC` system is getting bus powered (`5V`). If the system runs with `5V` jumper `J12` has to be shorten between `2-3`. When system is driven by an external source through the step-down converter the system voltage is switchable between `5V` and `3V3` over the slider switch `SW6`. If `3V3` are choosen the jumper `J12` should be shorten between `1-2`.
+With Jumper `J13` the `EXC` system is getting bus powered (`5V`). If the system runs with `5V` jumper `J12` has to be shorten between `2-3`. When the system is driven by an external source through the step-down converter the system voltage is switchable between `5V` and `3V3` over the slider switch `SW6`. If `3V3` are choosen the jumper `J12` should be shorten between `1-2`.
 
-> Please only change the state of `SW6` with disconnected power. Also check if jumper `J12` is set correctly!
+> Only change the state of `SW6` with disconnected power source. Also check if jumper `J12` is set correctly!
 
 ## LEDs/I2C
 
-To enable the LEDs `LED0-1` jumper J10 has to be shorten. If the `I2C` interface should be used the jumper `J10` has to be removed.
+To enable the LEDs `LED0-1` jumper `J10` has to be shorten. If the `I2C` interface should be used the jumper `J10` has to be removed.
 
 ## UART
 
-The UART of the `ATmega164A` can be coupled with the USB/UART bridge or with the external UART interface `J5`. To set the transmission over USB/UART bridge jumper `J1` and `J2` should be shorten between `1-2`. For the external UART interface jumper `J1` and `J2` should be shorten between `2-3`.
+The UART of the `ATmega164A` can be coupled with the USB/UART bridge or with the external UART interface at connector `J5`. To set the transmission over USB/UART bridge jumper `J1` and `J2` should be shorten between `1-2`. For the external UART interface jumper `J1` and `J2` should be shorten between `2-3`.
 
 ## Display
 
@@ -55,7 +55,7 @@ The display can be powerd constantly over `J99` shorten between `2-3` or control
 
 # Programming
 
-The Firmware of the `EXC` can be programmed with [Microchip Studio](#additional-information) over ISP with an [ATMEL ICE](#additional-information) connected to `J9` of the `EXC`. It is necessary to power the board from outside either over USB or the external power supply.
+The Firmware of the `EXC` can be programmed with [Microchip Studio](#additional-information) over ISP with an [ATMEL ICE](#additional-information) connected to `J9` of the `EXC`. It is necessary to power the board from outside either over USB or the external power supply during programming.
 
 # Software
 
