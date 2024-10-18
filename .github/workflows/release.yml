@@ -213,6 +213,12 @@ jobs:
         path: ./artifact/build
     - name: Display structure
       run: ls -R ./artifact/build
+    - name: Create Compressed File
+      run: |
+        cd ./artifact
+        tar -czvf ./build.tar.gz ./build
+        zip -r ./build.zip ./build
+        cd ..
 
     - name: Upload Build Asset
       uses: actions/upload-release-asset@v1
@@ -220,7 +226,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./artifact/build/build.tar.gz
+        asset_path: ./artifact/build.tar.gz
         asset_name: firmware.tar.gz
         asset_content_type: application/gzip
     
@@ -230,6 +236,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./artifact/build/build.zip
+        asset_path: ./artifact/build.zip
         asset_name: firmware.zip
         asset_content_type: application/zip
