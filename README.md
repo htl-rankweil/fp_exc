@@ -21,7 +21,7 @@ The `EXC` is a microcontroller board with an [ATmega16A](#additional-information
 
 # Hardware
 
-There are two parts of the hardware. The pcb and the housing of the `EXC`. The pcb is created with `KiCAD`. All files are built with `github actions` so that they are ready for a production environment.
+The pcb is created with `KiCAD`. All files are built with `github actions` so that they are ready for a production environment.
 
 ## PCB
 
