@@ -57,6 +57,13 @@ The display can be powerd constantly over `J99` shorten between `2-3` or control
 
 The Firmware of the `EXC` can be programmed with [Microchip Studio](#additional-information) over ISP with an [ATMEL ICE](#additional-information) connected to `J9` of the `EXC`. It is necessary to power the board from outside either over USB or the external power supply during programming.
 
+## FUSES
+
+| Register  | Value  |
+|:---------:|:------:|
+| `HIGH`    | `0xD8` |
+| `LOW`     | `0xFF` |
+
 # Software
 
 ## Dataflow diagram
@@ -74,7 +81,7 @@ The Firmware of the `EXC` can be programmed with [Microchip Studio](#additional-
 | Type       | Link               | Description              |
 |:----------:|:------------------:|:-------------------------|
 | Display | [web](https://at.rs-online.com/web/p/lcd-displays-monochrom/5326385) | Display for extendable controller |
-| Microchip Studio | [web](https://www.microchip.com/en-us/tools-resources/develop/microchip-studio) | Download Page for Microchip Studio
+| Microchip Studio | [web](https://www.microchip.com/en-us/tools-resources/develop/microchip-studio) | Download Page for Microchip Studio |
 | Atmel ICE | [pdf](https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-ICE_UserGuide.pdf) | Atmel ICE Datasheet |
 | ATmega16A | [pdf](https://ww1.microchip.com/downloads/en/devicedoc/atmel-8154-8-bit-avr-atmega16a_datasheet.pdf) | Microchip ATmega16A Datasheet
 | ATmega164A | [pdf](https://ww1.microchip.com/downloads/en/devicedoc/atmel-8272-8-bit-avr-microcontroller-atmega164a_pa-324a_pa-644a_pa-1284_p_datasheet.pdf) | Microchip ATmega164A Datasheet |
